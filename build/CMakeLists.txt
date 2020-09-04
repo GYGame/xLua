@@ -36,6 +36,44 @@ MARK_AS_ADVANCED(XLUA_PROJECT_DIR)
 set(LUA_SRC_PATH lua-5.3.5/src)
 set(LUAJIT_SRC_PATH luajit-2.1.0b3/src)
 
+
+#begin gydbug
+set(GYDEBUG_SRC gy/gydebug/gydebug.c)
+set_property(
+    SOURCE ${GYDEBUG_SRC}
+    APPEND
+    PROPERTY COMPILE_DEFINITIONS
+    LUA_LIB
+)
+list(APPEND THIRDPART_INC gy/gydebug)
+set(THIRDPART_SRC ${THIRDPART_SRC} ${GYDEBUG_SRC})
+#end gydbug
+
+#begin cjson
+set(CJSON_SRC tp/cjson/fpconv.c tp/cjson/lua_cjson.c tp/cjson/strbuf)
+set_property(
+    SOURCE ${CJSON_SRC}
+    APPEND
+    PROPERTY COMPILE_DEFINITIONS
+    LUA_LIB
+)
+list(APPEND THIRDPART_INC tp/cjson)
+set(THIRDPART_SRC ${THIRDPART_SRC} ${CJSON_SRC})
+#end cjson
+
+#begin profobuf
+set (LPB_SRC tp/protobuf/pb.c)
+set_property(
+    SOURCE ${LPB_SRC}
+    APPEND
+    PROPERTY COMPILE_DEFINITIONS
+    LUA_LIB
+)
+list(APPEND THIRDPART_INC tp/protobuf)
+set (THIRDPART_SRC ${THIRDPART_SRC} ${LPB_SRC})
+#end protobuf
+
+
 if (USING_LUAJIT)
 	
     if (APPLE AND NOT IOS AND NOT ANDROID)
@@ -228,3 +266,11 @@ else ( )
         )
     endif()
 endif ( )
+
+
+if(MSVC)
+# 添加cjson时，cjson里用到了strncasecmp。strcasecmp是BSD/POSIX标准，非ANSI标准，所以微软并不支持
+# 所以这里判断是MSVC时用stricmp替换strncasecmp
+# see:https://blog.csdn.net/mijichui2153/article/details/81061067?utm_source=blogxgwz6
+    add_definitions(-Dstrncasecmp=_strnicmp)
+endif()
