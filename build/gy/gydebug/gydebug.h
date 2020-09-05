@@ -5,3 +5,5 @@
 #include "lua.h"
 #include "lauxlib.h"
 #include "lobject.h"
+
+#define SIZET_LENGTH sizeof(size_t)

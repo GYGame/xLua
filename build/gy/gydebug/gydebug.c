@@ -9,20 +9,23 @@ static int logbuffersize; /* 单个buffer的大小 */
 
 static void gydebug_writesizetobuffer(size_t size)
 {
-	memcpy(logwriter, &size, size);
-	logwriter += size;
+	memcpy(logwriter, &size, SIZET_LENGTH);
+	logwriter += SIZET_LENGTH;
 }
 
 static void gydebug_writestrtobuffer(const char* str, size_t size)
 {
-	memcpy(logwriter, &str, size);
+	for (size_t ichar = 0; ichar < size; ichar++)
+	{
+		logwriter[ichar] = str[ichar];
+	}
 	logwriter += size;
 }
 
 static int gydebug_log(lua_State *L)
 {
 	int top = lua_gettop(L);
-	if (top != 1 && top  != 2)
+	if (top != 1 && top != 2)
 	{
 		luaL_error(L, "Parameter Error!The Number Of Parameter Must Be One Or Two!");
 		return 0;
@@ -56,7 +59,7 @@ static int gydebug_log(lua_State *L)
 	return 1;
 }
 
-static void lua_gydebug_swapbuffer()
+LUALIB_API void lua_gydebug_swapbuffer()
 {
 	if (logbufferindex == 0)
 	{
@@ -72,9 +75,9 @@ static void lua_gydebug_swapbuffer()
 	logwirterbegin = logwriter;
 }
 
-LUALIB_API int lua_gydebug_getstrlensize()
+LUALIB_API int lua_gydebug_getsizetlength()
 {
-	return sizeof(size_t);
+	return SIZET_LENGTH;
 }
 
 LUALIB_API char* lua_gydebug_getbuffer()
@@ -88,11 +91,10 @@ LUALIB_API size_t lua_gydebug_getbufferlength()
 }
 
 /*
-** Input: 
+** Input:
 		size 单个Buffer的大小
 */
 LUALIB_API int luaopen_gydebug(lua_State *L) {
-	// TEMP
 	logbuffers = (char*)malloc(sizeof(char) * 10000 * 2);
 	logbuffersize = 10000;
 	logbufferindex = 1;
