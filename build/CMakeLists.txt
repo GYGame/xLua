@@ -37,16 +37,16 @@ set(LUA_SRC_PATH lua-5.3.5/src)
 set(LUAJIT_SRC_PATH luajit-2.1.0b3/src)
 
 
-#begin gydbug
-set(GYDEBUG_SRC gy/gydebug/gydebug.c)
+#begin gyloginternal
+set(GYLOGINTERNAL_SRC gy/gyloginternal/gyloginternal.c)
 set_property(
-    SOURCE ${GYDEBUG_SRC}
+    SOURCE ${GYLOGINTERNAL_SRC}
     APPEND
     PROPERTY COMPILE_DEFINITIONS
     LUA_LIB
 )
-list(APPEND THIRDPART_INC gy/gydebug)
-set(THIRDPART_SRC ${THIRDPART_SRC} ${GYDEBUG_SRC})
+list(APPEND THIRDPART_INC gy/gyloginternal)
+set(THIRDPART_SRC ${THIRDPART_SRC} ${GYLOGINTERNAL_SRC})
 #end gydbug
 
 #begin cjson
