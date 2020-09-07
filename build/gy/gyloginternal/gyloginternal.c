@@ -65,25 +65,23 @@ static int gyloginternal_writelog(lua_State *L, size_t type)
 
 static int gyloginternal_log(lua_State *L)
 {
-	gyloginternal_writelog(L, TYPE_LOG);
+	return gyloginternal_writelog(L, TYPE_LOG);
 }
 
-
-static int gyloginternal_waring(lua_State *L)
+static int gyloginternal_warning(lua_State *L)
 {
-	gyloginternal_writelog(L, TYPE_WARING);
+	return gyloginternal_writelog(L, TYPE_WARING);
 }
 
 static int gyloginternal_error(lua_State *L)
 {
-	gyloginternal_writelog(L, TYPE_ERROR);
+	return gyloginternal_writelog(L, TYPE_ERROR);
 }
 
 static int gyloginternal_verbose(lua_State *L)
 {
-	gyloginternal_writelog(L, TYPE_VERBOSE);
+	return gyloginternal_writelog(L, TYPE_VERBOSE);
 }
-
 
 LUALIB_API void lua_gyloginternal_swapbuffer()
 {
@@ -128,7 +126,7 @@ LUALIB_API int luaopen_gyloginternal(lua_State *L)
 
 	luaL_Reg reg[] = {
 		{"log", gyloginternal_log},
-		{"waring", gyloginternal_waring},
+		{"warning", gyloginternal_warning},
 		{"error", gyloginternal_error},
 		{"verbose", gyloginternal_verbose},
 		{ NULL, NULL }
